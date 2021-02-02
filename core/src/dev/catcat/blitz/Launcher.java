@@ -3,7 +3,7 @@ package dev.catcat.blitz;
 import com.badlogic.gdx.Game;
 
 public class Launcher extends Game {
-	GameState game;
+	private GameState game;
 
 	@Override
 	public void create () {
