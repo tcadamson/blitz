@@ -10,20 +10,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameState implements Screen {
     private Camera camera;
+    private Viewport viewport;
     private Map<String, Color> colors;
-    private Vector2 box;
     private SpriteBatch batch;
     private TextureAtlas atlas;
     private TextureRegion player;
     private final float SCALE = 0.15f;
 
     GameState(Launcher game) {
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new OrthographicCamera();
+        viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         colors = new HashMap<>();
         batch = new SpriteBatch();
         atlas = new TextureAtlas("test.atlas");
@@ -55,7 +58,7 @@ public class GameState implements Screen {
 
     @Override
     public void resize(int w, int h) {
-        box = new Vector2(w, h);
+        viewport.update(w, h, true);
     }
 
     @Override
