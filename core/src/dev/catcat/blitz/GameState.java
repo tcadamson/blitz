@@ -20,15 +20,17 @@ public class GameState implements Screen {
     private SpriteBatch batch;
     private TextureAtlas atlas;
     private TextureRegion player;
+    private final float SCALE = 0.15f;
 
     GameState(Launcher game) {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         colors = new HashMap<>();
         batch = new SpriteBatch();
         atlas = new TextureAtlas("test.atlas");
-        player = atlas.findRegion("4");
-        camera.position.scl(1 / 2);
-        colors.put("bg", Color.valueOf("DCE0DA"));
+        player = atlas.findRegion("a");
+        // TODO: import these from some external config file
+        colors.put("bg", Color.valueOf("DCE0E0"));
+        colors.put("body", Color.valueOf("1D3557"));
     }
 
     @Override
@@ -38,12 +40,16 @@ public class GameState implements Screen {
     @Override
     public void render(float delta) {
         Color bg = colors.get("bg");
+        Color body = colors.get("body");
+        Vector2 size = new Vector2(player.getRegionWidth(), player.getRegionHeight()).scl(SCALE);
         Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(player, camera.position.x - player.getRegionWidth() / 2, camera.position.y - player.getRegionHeight() / 2);
+        batch.setColor(body);
+        batch.draw(player, camera.position.x - size.x / 2, camera.position.y - size.y / 2, size.x, size.y);
+        batch.setColor(Color.WHITE);
         batch.end();
     }
 
