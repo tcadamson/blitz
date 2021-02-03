@@ -30,7 +30,9 @@ public class GameState implements Screen {
     private TextureAtlas atlas;
     private TextureRegion cell;
     private Vector2 size;
+    private double accumulator;
     private final float SCALE = 0.15f;
+    private final float MAX = 0.25f;
     private final float DT = 1/60f;
     private final int DX = 6;
     private final int DS = 2;
@@ -68,7 +70,13 @@ public class GameState implements Screen {
         batch.draw(cell, camera.position.x - size.x/2, camera.position.y - size.y/2, size.x, size.y);
         batch.end();
         debug.render(world, camera.combined);
-        world.step(DT, DX, DS);
+        // TODO: add interpolation step following accumulator loop
+        // see https://saltares.com/games/fixing-your-timestep-in-libgdx-and-box2d/
+        accumulator += Math.min(delta, MAX);
+        while (accumulator >= DT) {
+            world.step(DT, DX, DS);
+            accumulator -= DT;
+        }
     }
 
     @Override
