@@ -10,27 +10,42 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameState implements Screen {
+    private World world;
+    private Box2DDebugRenderer debug;
     private Camera camera;
     private Viewport viewport;
     private Map<String, Color> colors;
     private SpriteBatch batch;
     private TextureAtlas atlas;
-    private TextureRegion player;
+    private TextureRegion cell;
+    private Vector2 size;
     private final float SCALE = 0.15f;
+    private final float DT = 1/60f;
+    private final int DX = 6;
+    private final int DS = 2;
 
     GameState(Launcher game) {
+        world = new World(new Vector2(), true);
+        debug = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         colors = new HashMap<>();
         batch = new SpriteBatch();
         atlas = new TextureAtlas("test.atlas");
-        player = atlas.findRegion("a");
+        cell = atlas.findRegion("a");
+        size = new Vector2(cell.getRegionWidth(), cell.getRegionHeight()).scl(SCALE);
+        circle(size.len());
         // TODO: import these from some external config file
         colors.put("bg", Color.valueOf("DCE0E0"));
         colors.put("body", Color.valueOf("1D3557"));
@@ -44,21 +59,21 @@ public class GameState implements Screen {
     public void render(float delta) {
         Color bg = colors.get("bg");
         Color body = colors.get("body");
-        Vector2 size = new Vector2(player.getRegionWidth(), player.getRegionHeight()).scl(SCALE);
         Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.setColor(body);
-        batch.draw(player, camera.position.x - size.x / 2, camera.position.y - size.y / 2, size.x, size.y);
-        batch.setColor(Color.WHITE);
+        batch.draw(cell, camera.position.x - size.x/2, camera.position.y - size.y/2, size.x, size.y);
         batch.end();
+        debug.render(world, camera.combined);
+        world.step(DT, DX, DS);
     }
 
     @Override
     public void resize(int w, int h) {
-        viewport.update(w, h, true);
+        viewport.update(w, h);
     }
 
     @Override
@@ -75,5 +90,16 @@ public class GameState implements Screen {
 
     @Override
     public void dispose() {
+    }
+
+    private void circle(float d) {
+        CircleShape shape = new CircleShape();
+        BodyDef def = new BodyDef();
+        def.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(def);
+        shape.setRadius(d/2);
+        body.createFixture(shape, 1);
+        body.setTransform(0, 0, 0);
+        shape.dispose();
     }
 }
