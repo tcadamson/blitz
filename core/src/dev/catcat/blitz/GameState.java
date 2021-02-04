@@ -35,13 +35,14 @@ public class GameState implements Screen {
     private Vector2 dir;
     private Body collider;
     private float accumulator;
+    private final float PPM = 100;
     private final float SCALE = 0.15f;
     private final float MAX = 0.25f;
     private final float DT = 1/60f;
     private final int DX = 6;
     private final int DS = 2;
     private final int DAMP = 20;
-    private final int THRUST = 2500;
+    private final int THRUST = 25;
 
     GameState(Launcher game) {
         world = new World(new Vector2(), true);
@@ -116,7 +117,7 @@ public class GameState implements Screen {
         batch.setColor(body);
         batch.draw(quad, -size.x/2, -size.y/2, size.x, size.y);
         batch.end();
-        debug.render(world, camera.combined);
+        debug.render(world, camera.combined.cpy().scl(PPM));
         collider.applyForceToCenter(dir.cpy().scl(THRUST * collider.getMass()), true);
         // TODO: add interpolation step following accumulator loop
         // see https://saltares.com/games/fixing-your-timestep-in-libgdx-and-box2d/
@@ -154,7 +155,7 @@ public class GameState implements Screen {
         def.type = BodyDef.BodyType.DynamicBody;
         def.linearDamping = DAMP;
         Body body = world.createBody(def);
-        shape.setRadius(d/2);
+        shape.setRadius(d/2/PPM);
         body.createFixture(shape, 1);
         body.setTransform(0, 0, 0);
         shape.dispose();
