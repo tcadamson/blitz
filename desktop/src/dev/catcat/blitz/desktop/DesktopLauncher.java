@@ -10,6 +10,8 @@ public class DesktopLauncher {
 		config.title = "blitz";
 		config.width = 1480;
 		config.height = 720;
+		config.foregroundFPS = 0;
+		config.backgroundFPS = 0;
 		new LwjglApplication(new Launcher(), config);
 	}
 }

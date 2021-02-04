@@ -61,6 +61,7 @@ public class GameState implements Screen {
     public void render(float delta) {
         Color bg = colors.get("bg");
         Color body = colors.get("body");
+        Gdx.graphics.setTitle(Integer.toString(Gdx.graphics.getFramesPerSecond()) + " FPS");
         Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
