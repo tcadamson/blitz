@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -33,9 +34,12 @@ public class GameState implements Screen {
     private TextureRegion quad;
     private Vector2 size;
     private Vector2 dir;
+    private Vector2 pos1;
+    private Vector2 pos2;
+    private Vector2 pos3;
     private Body collider;
     private float accumulator;
-    private final float PPM = 100;
+    private final float PPM = 100f;
     private final float SCALE = 0.15f;
     private final float MAX = 0.25f;
     private final float DT = 1/60f;
@@ -55,6 +59,9 @@ public class GameState implements Screen {
         quad = atlas.findRegion("a");
         size = new Vector2(quad.getRegionWidth(), quad.getRegionHeight()).scl(SCALE);
         dir = new Vector2();
+        pos1 = new Vector2();
+        pos2 = new Vector2();
+        pos3 = new Vector2();
         collider = circle(size.len());
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -108,24 +115,26 @@ public class GameState implements Screen {
     public void render(float delta) {
         Color bg = colors.get("bg");
         Color body = colors.get("body");
+        Vector2 draw = pos2.cpy().scl(PPM).sub(size.x/2, size.y/2);
         Gdx.graphics.setTitle(Integer.toString(Gdx.graphics.getFramesPerSecond()) + " FPS");
         Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.setColor(body);
-        batch.draw(quad, -size.x/2, -size.y/2, size.x, size.y);
+        batch.draw(quad, draw.x, draw.y, size.x, size.y);
         batch.end();
-        debug.render(world, camera.combined.cpy().scl(PPM));
+        debug.render(world, camera.combined.scl(PPM));
         collider.applyForceToCenter(dir.cpy().scl(THRUST * collider.getMass()), true);
-        // TODO: add interpolation step following accumulator loop
-        // see https://saltares.com/games/fixing-your-timestep-in-libgdx-and-box2d/
         accumulator += Math.min(delta, MAX);
         while (accumulator >= DT) {
+            pos3.set(collider.getPosition());
+            pos1.set(pos2);
             world.step(DT, DX, DS);
             accumulator -= DT;
         }
+        interpolate(accumulator / DT);
+        camera.update();
     }
 
     @Override
@@ -160,5 +169,11 @@ public class GameState implements Screen {
         body.setTransform(0, 0, 0);
         shape.dispose();
         return body;
+    }
+
+    private void interpolate(float alpha) {
+        pos2.set(pos3.x * alpha + pos1.x * (1f - alpha), pos3.y * alpha + pos1.y * (1f - alpha));
+        // Alternative that doesn't seem to work too well...
+        //pos2.set(Interpolation.linear.apply(pos1.x, pos3.x, alpha), Interpolation.linear.apply(pos1.y, pos3.y, alpha));
     }
 }
