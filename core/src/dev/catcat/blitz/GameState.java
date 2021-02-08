@@ -36,17 +36,16 @@ public class GameState implements Screen {
     private Vector2 dir;
     private Vector2 pos1;
     private Vector2 pos2;
-    private Vector2 pos3;
     private Body collider;
     private float accumulator;
     private final float PPM = 100f;
     private final float SCALE = 0.15f;
-    private final float MAX = 0.25f;
     private final float DT = 1/60f;
     private final int DX = 6;
     private final int DS = 2;
     private final int DAMP = 20;
     private final int THRUST = 25;
+    private final int MAX_STEPS = 5;
 
     GameState(Launcher game) {
         world = new World(new Vector2(), true);
@@ -61,8 +60,8 @@ public class GameState implements Screen {
         dir = new Vector2();
         pos1 = new Vector2();
         pos2 = new Vector2();
-        pos3 = new Vector2();
         collider = circle(size.len());
+        world.setAutoClearForces(false);
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int key) {
@@ -119,22 +118,14 @@ public class GameState implements Screen {
         Gdx.graphics.setTitle(Integer.toString(Gdx.graphics.getFramesPerSecond()) + " FPS");
         Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        debug.render(world, camera.combined.cpy().scl(PPM));
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.setColor(body);
         batch.draw(quad, draw.x, draw.y, size.x, size.y);
         batch.end();
-        debug.render(world, camera.combined.scl(PPM));
         collider.applyForceToCenter(dir.cpy().scl(THRUST * collider.getMass()), true);
-        accumulator += Math.min(delta, MAX);
-        while (accumulator >= DT) {
-            pos3.set(collider.getPosition());
-            pos1.set(pos2);
-            world.step(DT, DX, DS);
-            accumulator -= DT;
-        }
-        interpolate(accumulator / DT);
-        camera.update();
+        step(delta);
     }
 
     @Override
@@ -171,9 +162,27 @@ public class GameState implements Screen {
         return body;
     }
 
+    private void step(float delta) {
+        // Source: https://www.unagames.com/blog/daniele/2010/06/fixed-time-step-implementation-box2d
+        accumulator += delta;
+        int steps = (int) Math.floor(accumulator / DT);
+        if (steps > 0) {
+            accumulator -= steps * DT;
+        }
+        for (int i = 0; i < Math.min(steps, MAX_STEPS); ++i) {
+            Vector2 pos = collider.getPosition();
+            pos1.set(pos);
+            pos2.set(pos);
+            world.step(DT, DX, DS);
+        }
+        world.clearForces();
+        interpolate(accumulator / DT);
+    }
+
     private void interpolate(float alpha) {
-        pos2.set(pos3.x * alpha + pos1.x * (1f - alpha), pos3.y * alpha + pos1.y * (1f - alpha));
+        Vector2 pos = collider.getPosition();
+        pos2.set(pos.x * alpha + (1f - alpha) * pos1.x, pos.y * alpha + (1f - alpha) * pos1.y);
         // Alternative that doesn't seem to work too well...
-        //pos2.set(Interpolation.linear.apply(pos1.x, pos3.x, alpha), Interpolation.linear.apply(pos1.y, pos3.y, alpha));
+        // pos2.set(Interpolation.linear.apply(pos1.x, pos3.x, alpha), Interpolation.linear.apply(pos1.y, pos3.y, alpha));
     }
 }
