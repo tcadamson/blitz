@@ -26,6 +26,7 @@ public class GameState implements Screen {
     private Box2DDebugRenderer debug;
     private Camera camera;
     private Viewport viewport;
+    private Controller controller;
     private Map<String, Color> colors;
     private PooledEngine ecs;
     private final float PPM = 100f;
@@ -35,10 +36,12 @@ public class GameState implements Screen {
         debug = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        controller = new Controller();
         colors = new HashMap<>();
         ecs = new PooledEngine();
         ecs.addSystem(new Physics(world));
         init(ecs.createEntity());
+        Gdx.input.setInputProcessor(controller);
         // TODO: import these from some external config file
         colors.put("bg", Color.valueOf("DCE0E0"));
         colors.put("body", Color.valueOf("1D3557"));
@@ -56,6 +59,7 @@ public class GameState implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         debug.render(world, camera.combined.cpy().scl(PPM));
         ecs.update(dt);
+        controller.update();
     }
 
     @Override
