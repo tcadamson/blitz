@@ -21,7 +21,7 @@ public class Movement extends IteratingSystem {
     protected void processEntity(Entity e, float dt) {
         Collider cc = Maps.collider.get(e);
         Steer sc = Maps.steer.get(e);
-        int thrust = 50;
+        int thrust = 30;
         sc.dir.set(controller.dir());
         cc.body.applyForceToCenter(sc.dir.cpy().scl(thrust * cc.body.getMass()), true);
     }

@@ -1,6 +1,7 @@
 package dev.catcat.blitz.state;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.catcat.blitz.Controller;
@@ -30,6 +32,7 @@ public class Game implements Screen {
     private Viewport viewport;
     private Controller controller;
     private PooledEngine ecs;
+    private Array<EntitySystem> sys;
     private final float PPM = 100f;
 
     public Game(Launcher game) {
@@ -39,9 +42,15 @@ public class Game implements Screen {
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         controller = new Controller();
         ecs = new PooledEngine();
-        ecs.addSystem(new Physics(world));
-        ecs.addSystem(new Movement(controller));
-        ecs.addSystem(new Draw(camera, PPM));
+        sys = new Array<>();
+        sys.add(new Draw(camera, PPM));
+        sys.add(new Movement(controller));
+        sys.add(new Physics(world));
+        for (int i = 0; i < sys.size; i++) {
+            EntitySystem s = sys.get(i);
+            s.priority = i;
+            ecs.addSystem(s);
+        }
         init(ecs.createEntity());
         Gdx.input.setInputProcessor(controller);
     }
@@ -53,9 +62,9 @@ public class Game implements Screen {
     @Override
     public void render(float dt) {
         Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
+        controller.update();
         ecs.update(dt);
         debug.render(world, camera.combined.cpy().scl(PPM));
-        controller.update();
     }
 
     @Override
