@@ -13,8 +13,8 @@ import dev.catcat.blitz.component.Transform;
 public class Physics extends IteratingSystem {
     private World world;
     private Array<Entity> entities;
-    private float accumulator;
-    private final float DT = 1/60f;
+    private float accumulator = 0f;
+    private final float DT = 1f/60f;
     private final int DX = 6;
     private final int DS = 2;
     private final int MAX_STEPS = 5;
@@ -53,7 +53,7 @@ public class Physics extends IteratingSystem {
         for (Entity e : entities) {
             Transform tc = Maps.transform.get(e);
             Vector2 pos = Maps.collider.get(e).body.getPosition();
-            float diff = 1 - alpha;
+            float diff = 1f - alpha;
             tc.pos.set(pos.x * alpha + diff * tc.pos.x, pos.y * alpha + diff * tc.pos.y);
         }
     }

@@ -1,4 +1,4 @@
-package dev.catcat.blitz;
+package dev.catcat.blitz.state;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -17,11 +17,15 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.HashMap;
 import java.util.Map;
+import dev.catcat.blitz.Controller;
+import dev.catcat.blitz.Launcher;
 import dev.catcat.blitz.component.Collider;
+import dev.catcat.blitz.component.Steer;
 import dev.catcat.blitz.component.Transform;
+import dev.catcat.blitz.system.Movement;
 import dev.catcat.blitz.system.Physics;
 
-public class GameState implements Screen {
+public class Game implements Screen {
     private World world;
     private Box2DDebugRenderer debug;
     private Camera camera;
@@ -31,7 +35,7 @@ public class GameState implements Screen {
     private PooledEngine ecs;
     private final float PPM = 100f;
 
-    GameState(Launcher game) {
+    public Game(Launcher game) {
         world = new World(new Vector2(), true);
         debug = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
@@ -40,6 +44,7 @@ public class GameState implements Screen {
         colors = new HashMap<>();
         ecs = new PooledEngine();
         ecs.addSystem(new Physics(world));
+        ecs.addSystem(new Movement(controller));
         init(ecs.createEntity());
         Gdx.input.setInputProcessor(controller);
         // TODO: import these from some external config file
@@ -86,11 +91,14 @@ public class GameState implements Screen {
     private void init(Entity e) {
         Transform tc = ecs.createComponent(Transform.class);
         Collider cc = ecs.createComponent(Collider.class);
+        Steer sc = ecs.createComponent(Steer.class);
         CircleShape shape = new CircleShape();
         BodyDef def = new BodyDef();
         int r = 50;
+        float damp = 20f;
         shape.setRadius(r/PPM);
         def.type = BodyDef.BodyType.DynamicBody;
+        def.linearDamping = damp;
         cc.body = world.createBody(def);
         cc.body.createFixture(shape, 1);
         cc.body.setTransform(tc.pos.x, tc.pos.y, 0);
@@ -98,6 +106,7 @@ public class GameState implements Screen {
         shape.dispose();
         e.add(cc);
         e.add(tc);
+        e.add(sc);
         ecs.addEntity(e);
     }
 }
