@@ -32,6 +32,7 @@ public class Physics extends IteratingSystem {
 
     @Override
     public void update(float dt) {
+        super.update(dt);
         // Source: https://www.unagames.com/blog/daniele/2010/06/fixed-time-step-implementation-box2d
         accumulator += dt;
         int steps = (int) Math.floor(accumulator / DT);
@@ -53,7 +54,7 @@ public class Physics extends IteratingSystem {
         for (Entity e : entities) {
             Transform tc = Maps.transform.get(e);
             Vector2 pos = Maps.collider.get(e).body.getPosition();
-            float diff = 1f - alpha;
+            float diff = 1 - alpha;
             tc.pos.set(pos.x * alpha + diff * tc.pos.x, pos.y * alpha + diff * tc.pos.y);
         }
     }

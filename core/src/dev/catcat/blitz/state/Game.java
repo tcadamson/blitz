@@ -4,10 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -15,23 +13,22 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import java.util.HashMap;
-import java.util.Map;
 import dev.catcat.blitz.Controller;
 import dev.catcat.blitz.Launcher;
 import dev.catcat.blitz.component.Collider;
+import dev.catcat.blitz.component.Quad;
 import dev.catcat.blitz.component.Steer;
 import dev.catcat.blitz.component.Transform;
+import dev.catcat.blitz.system.Draw;
 import dev.catcat.blitz.system.Movement;
 import dev.catcat.blitz.system.Physics;
 
 public class Game implements Screen {
     private World world;
     private Box2DDebugRenderer debug;
-    private Camera camera;
+    private OrthographicCamera camera;
     private Viewport viewport;
     private Controller controller;
-    private Map<String, Color> colors;
     private PooledEngine ecs;
     private final float PPM = 100f;
 
@@ -41,15 +38,12 @@ public class Game implements Screen {
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         controller = new Controller();
-        colors = new HashMap<>();
         ecs = new PooledEngine();
         ecs.addSystem(new Physics(world));
         ecs.addSystem(new Movement(controller));
+        ecs.addSystem(new Draw(camera, PPM));
         init(ecs.createEntity());
         Gdx.input.setInputProcessor(controller);
-        // TODO: import these from some external config file
-        colors.put("bg", Color.valueOf("DCE0E0"));
-        colors.put("body", Color.valueOf("1D3557"));
     }
 
     @Override
@@ -58,12 +52,9 @@ public class Game implements Screen {
 
     @Override
     public void render(float dt) {
-        Color bg = colors.get("bg");
-        Gdx.graphics.setTitle(Integer.toString(Gdx.graphics.getFramesPerSecond()) + " FPS");
-        Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        debug.render(world, camera.combined.cpy().scl(PPM));
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
         ecs.update(dt);
+        debug.render(world, camera.combined.cpy().scl(PPM));
         controller.update();
     }
 
@@ -92,11 +83,16 @@ public class Game implements Screen {
         Transform tc = ecs.createComponent(Transform.class);
         Collider cc = ecs.createComponent(Collider.class);
         Steer sc = ecs.createComponent(Steer.class);
+        Quad qc = ecs.createComponent(Quad.class);
         CircleShape shape = new CircleShape();
+        TextureAtlas atlas = new TextureAtlas("test.atlas");
         BodyDef def = new BodyDef();
-        int r = 50;
         float damp = 20f;
-        shape.setRadius(r/PPM);
+        float scale = 0.15f;
+        qc.region = atlas.findRegion("a");
+        qc.color = "body";
+        qc.box.set(qc.region.getRegionWidth(), qc.region.getRegionHeight()).scl(scale);
+        shape.setRadius(qc.box.len()/2/PPM);
         def.type = BodyDef.BodyType.DynamicBody;
         def.linearDamping = damp;
         cc.body = world.createBody(def);
@@ -107,6 +103,7 @@ public class Game implements Screen {
         e.add(cc);
         e.add(tc);
         e.add(sc);
+        e.add(qc);
         ecs.addEntity(e);
     }
 }

@@ -3,17 +3,17 @@ package dev.catcat.blitz;
 import dev.catcat.blitz.state.Game;
 
 public class Launcher extends com.badlogic.gdx.Game {
-	private Game game;
+	private Game blitz;
 
 	@Override
 	public void create() {
-		game = new Game(this);
-		setScreen(game);
+		blitz = new Game(this);
+		setScreen(blitz);
 	}
 
 	@Override
 	public void dispose() {
-		game.dispose();
+		blitz.dispose();
 	}
 
 	@Override
