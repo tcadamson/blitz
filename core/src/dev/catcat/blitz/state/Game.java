@@ -13,10 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.catcat.blitz.Controller;
-import dev.catcat.blitz.Launcher;
+import dev.catcat.blitz.component.Collider;
 import dev.catcat.blitz.component.Quad;
 import dev.catcat.blitz.component.Transform;
 import dev.catcat.blitz.system.Draw;
+import dev.catcat.blitz.system.Physics;
 
 public class Game implements Screen {
     private World world;
@@ -34,16 +35,23 @@ public class Game implements Screen {
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         controller = new Controller();
         ecs = new com.artemis.World(new WorldConfigurationBuilder()
-            .with(new Draw(res, camera))
+            .with(
+                new Draw(res, camera),
+                new Physics(world)
+            )
             .build());
         Archetype core = new ArchetypeBuilder()
             .add(Transform.class)
+            .add(Collider.class)
             .add(Quad.class)
             .build(ecs);
         int e = ecs.create(core);
-        Quad q = ecs.getMapper(Quad.class).get(e);
-        q.atlas = "test.atlas";
-        q.region = "a";
+        Quad qc = ecs.getMapper(Quad.class).get(e);
+        Collider cc = ecs.getMapper(Collider.class).get(e);
+        qc.atlas = "test.atlas";
+        qc.region = "a";
+        cc.r = 50f;
+        cc.damp = 20f;
         Gdx.input.setInputProcessor(controller);
     }
 
