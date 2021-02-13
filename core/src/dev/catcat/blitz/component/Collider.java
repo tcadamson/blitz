@@ -1,8 +1,8 @@
 package dev.catcat.blitz.component;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.artemis.Component;
 
-public class Collider implements Component {
-    public Body body;
+public class Collider extends Component {
+    public float r;
+    public float damp;
 }
