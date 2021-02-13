@@ -5,6 +5,7 @@ import com.artemis.ArchetypeBuilder;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -26,14 +27,14 @@ public class Game implements Screen {
     private com.artemis.World ecs;
     private final float PPM = 100f;
 
-    public Game(Launcher game) {
+    public Game(AssetManager res) {
         world = new World(new Vector2(), true);
         debug = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         controller = new Controller();
         ecs = new com.artemis.World(new WorldConfigurationBuilder()
-            .with(new Draw())
+            .with(new Draw(res, camera))
             .build());
         Archetype core = new ArchetypeBuilder()
             .add(Transform.class)

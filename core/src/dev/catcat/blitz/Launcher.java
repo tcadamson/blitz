@@ -1,14 +1,21 @@
 package dev.catcat.blitz;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import dev.catcat.blitz.state.Game;
 
 public class Launcher extends com.badlogic.gdx.Game {
+	private AssetManager res;
 	private Game blitz;
 
 	@Override
 	public void create() {
-		blitz = new Game(this);
-		setScreen(blitz);
+		res = new AssetManager();
+		blitz = new Game(res);
+		// TODO: load these by crawling directory
+		res.load("test.atlas", TextureAtlas.class);
+		res.load("test.png", Texture.class);
 	}
 
 	@Override
@@ -19,5 +26,8 @@ public class Launcher extends com.badlogic.gdx.Game {
 	@Override
 	public void render() {
 		super.render();
+		if (res.update()) {
+			setScreen(blitz);
+		}
 	}
 }
