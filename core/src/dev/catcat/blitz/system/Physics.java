@@ -17,6 +17,9 @@ public class Physics extends IteratingSystem {
     ComponentMapper<Transform> tm;
     ComponentMapper<Collider> cm;
     private final float PPM = 100f;
+    private final float DT = 1/60f;
+    private final int DX = 6;
+    private final int DS = 2;
 
     public Physics(World world) {
         this.world = world;
@@ -47,6 +50,7 @@ public class Physics extends IteratingSystem {
     protected void process(int e) {
         Transform tc = tm.get(e);
         pos.set(cm.get(e).body.getPosition()).scl(PPM);
+        world.step(DT, DX, DS);
         tc.x = pos.x;
         tc.y = pos.y;
     }

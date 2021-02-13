@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Controller extends InputAdapter {
     private Map<String, Integer> axes;
+    private Vector2 dir;
     private boolean[] pressed;
     private boolean[] released;
     private boolean[] down;
@@ -15,6 +16,7 @@ public class Controller extends InputAdapter {
 
     public Controller() {
         axes = new HashMap<>();
+        dir = new Vector2();
         pressed = new boolean[KEYS];
         released = new boolean[KEYS];
         down = new boolean[KEYS];
@@ -57,7 +59,7 @@ public class Controller extends InputAdapter {
         }
     }
 
-    public Vector2 dir() {
+    public Vector2 dirs() {
         float x = 0;
         float y = 0;
         for (Map.Entry<String, Integer> axis : axes.entrySet()) {
@@ -70,7 +72,7 @@ public class Controller extends InputAdapter {
                 y += c2 == 'y' ? v : 0;
             }
         }
-        return new Vector2(x, y).nor();
+        return dir.set(x, y).nor();
     }
 
     private boolean handler(char key, boolean[] group) {

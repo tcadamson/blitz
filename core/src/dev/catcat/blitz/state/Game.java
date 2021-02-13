@@ -15,8 +15,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.catcat.blitz.Controller;
 import dev.catcat.blitz.component.Collider;
 import dev.catcat.blitz.component.Quad;
+import dev.catcat.blitz.component.Steer;
 import dev.catcat.blitz.component.Transform;
 import dev.catcat.blitz.system.Draw;
+import dev.catcat.blitz.system.Motion;
 import dev.catcat.blitz.system.Physics;
 
 public class Game implements Screen {
@@ -37,6 +39,7 @@ public class Game implements Screen {
         ecs = new com.artemis.World(new WorldConfigurationBuilder()
             .with(
                 new Draw(res, camera),
+                new Motion(controller),
                 new Physics(world)
             )
             .build());
@@ -44,14 +47,17 @@ public class Game implements Screen {
             .add(Transform.class)
             .add(Collider.class)
             .add(Quad.class)
+            .add(Steer.class)
             .build(ecs);
         int e = ecs.create(core);
-        Quad qc = ecs.getMapper(Quad.class).get(e);
         Collider cc = ecs.getMapper(Collider.class).get(e);
+        Quad qc = ecs.getMapper(Quad.class).get(e);
+        Steer sc = ecs.getMapper(Steer.class).get(e);
         qc.atlas = "test.atlas";
         qc.region = "a";
         cc.r = 50f;
         cc.damp = 20f;
+        sc.thrust = 30f;
         Gdx.input.setInputProcessor(controller);
     }
 
