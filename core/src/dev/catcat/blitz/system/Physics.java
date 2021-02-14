@@ -3,6 +3,7 @@ package dev.catcat.blitz.system;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -17,9 +18,6 @@ public class Physics extends IteratingSystem {
     ComponentMapper<Transform> tm;
     ComponentMapper<Collider> cm;
     private final float PPM = 100f;
-    private final float DT = 1/60f;
-    private final int DX = 6;
-    private final int DS = 2;
 
     public Physics(World world) {
         this.world = world;
@@ -50,8 +48,23 @@ public class Physics extends IteratingSystem {
     protected void process(int e) {
         Transform tc = tm.get(e);
         pos.set(cm.get(e).body.getPosition()).scl(PPM);
-        world.step(DT, DX, DS);
         tc.x = pos.x;
         tc.y = pos.y;
+    }
+
+    public World getBox2DWorld() {
+        return world;
+    }
+
+    public void interpolate(float alpha) {
+        IntBag entities = subscription.getEntities();
+        int[] ids = entities.getData();
+        for (int i = 0; i < entities.size(); i++) {
+            int e = ids[i];
+            float diff = 1 - alpha;
+            Transform tc = tm.get(ids[i]);
+            pos.set(cm.get(e).body.getPosition().scl(PPM));
+            tc.set(pos.x * alpha + diff * tc.x, pos.y * alpha + diff * tc.y);
+        }
     }
 }

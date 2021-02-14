@@ -59,7 +59,7 @@ public class Controller extends InputAdapter {
         }
     }
 
-    public Vector2 dirs() {
+    public Vector2 getDir() {
         float x = 0;
         float y = 0;
         for (Map.Entry<String, Integer> axis : axes.entrySet()) {

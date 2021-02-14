@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.catcat.blitz.Controller;
+import dev.catcat.blitz.Run;
 import dev.catcat.blitz.component.Collider;
 import dev.catcat.blitz.component.Quad;
 import dev.catcat.blitz.component.Steer;
@@ -42,6 +43,7 @@ public class Game implements Screen {
                 new Motion(controller),
                 new Physics(world)
             )
+            .register(new Run())
             .build());
         Archetype core = new ArchetypeBuilder()
             .add(Transform.class)
@@ -58,6 +60,7 @@ public class Game implements Screen {
         cc.r = 50f;
         cc.damp = 20f;
         sc.thrust = 30f;
+        world.setAutoClearForces(false);
         Gdx.input.setInputProcessor(controller);
     }
 
