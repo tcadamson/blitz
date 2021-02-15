@@ -17,7 +17,7 @@ public class Physics extends IteratingSystem {
     Vector2 pos;
     ComponentMapper<Transform> tm;
     ComponentMapper<Collider> cm;
-    private final float PPM = 100f;
+    public final float PPM = 100f;
 
     public Physics(World world) {
         this.world = world;
