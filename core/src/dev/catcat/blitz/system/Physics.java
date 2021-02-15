@@ -48,8 +48,7 @@ public class Physics extends IteratingSystem {
     protected void process(int e) {
         Transform tc = tm.get(e);
         pos.set(cm.get(e).body.getPosition()).scl(PPM);
-        tc.x = pos.x;
-        tc.y = pos.y;
+        tc.set(pos);
     }
 
     public World getBox2DWorld() {
@@ -62,7 +61,7 @@ public class Physics extends IteratingSystem {
         for (int i = 0; i < entities.size(); i++) {
             int e = ids[i];
             float diff = 1 - alpha;
-            Transform tc = tm.get(ids[i]);
+            Transform tc = tm.get(e);
             pos.set(cm.get(e).body.getPosition().scl(PPM));
             tc.set(pos.x * alpha + diff * tc.x, pos.y * alpha + diff * tc.y);
         }

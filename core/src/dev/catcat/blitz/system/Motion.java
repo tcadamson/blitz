@@ -30,8 +30,7 @@ public class Motion extends IteratingSystem {
         Collider cc = cm.get(e);
         Steer sc = sm.get(e);
         dir.set(controller.getDir());
-        sc.dx = dir.x;
-        sc.dy = dir.y;
+        sc.set(dir);
         cc.body.applyForceToCenter(dir.scl(sc.thrust * cc.body.getMass()), true);
     }
 }

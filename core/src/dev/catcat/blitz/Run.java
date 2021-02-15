@@ -7,10 +7,10 @@ import dev.catcat.blitz.system.Physics;
 
 public class Run extends SystemInvocationStrategy {
     private float accumulator;
-    private final float DT = 1/60f;
+    private final float DT = 1/240f;
     private final int DX = 6;
     private final int DS = 2;
-    private final int MAX_STEPS = 5;
+    private final int MAX_STEPS = 20;
 
     @Override
     protected void process() {
@@ -19,7 +19,6 @@ public class Run extends SystemInvocationStrategy {
             BaseSystem sys = systemsData[i];
             if (disabled.get(i))
                 continue;
-            updateEntityStates();
             if (sys instanceof Physics) {
                 // Source: https://www.unagames.com/blog/daniele/2010/06/fixed-time-step-implementation-box2d
                 Physics physics = (Physics) sys;
@@ -30,12 +29,14 @@ public class Run extends SystemInvocationStrategy {
                     accumulator -= steps * DT;
                 }
                 for (int j = 0; j < Math.min(steps, MAX_STEPS); ++j) {
+                    updateEntityStates();
                     physics.process();
                     world.step(DT, DX, DS);
                 }
                 world.clearForces();
                 physics.interpolate(accumulator / DT);
             } else {
+                updateEntityStates();
                 sys.process();
             }
         }
