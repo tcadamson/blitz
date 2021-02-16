@@ -5,9 +5,9 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,15 +18,14 @@ import dev.catcat.blitz.component.Transform;
 
 @All({Transform.class, Quad.class})
 public class Draw extends IteratingSystem {
-    private AssetManager res;
-    private OrthographicCamera camera;
+    protected ComponentMapper<Transform> tm;
+    protected ComponentMapper<Quad> qm;
+    private final AssetManager res;
+    private final Camera camera;
     private SpriteBatch batch;
     private Map<String, Color> colors;
-    private ComponentMapper<Transform> tm;
-    private ComponentMapper<Quad> qm;
-    private final float SCALE = 0.15f;
 
-    public Draw(AssetManager res, OrthographicCamera camera) {
+    public Draw(AssetManager res, Camera camera) {
         this.res = res;
         this.camera = camera;
     }
@@ -44,8 +43,9 @@ public class Draw extends IteratingSystem {
     protected void inserted(int e) {
         Quad qc = qm.get(e);
         TextureRegion region = res.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
-        qc.w = region.getRegionWidth() * SCALE;
-        qc.h = region.getRegionHeight() * SCALE;
+        float scale = 0.15f;
+        qc.w = region.getRegionWidth() * scale;
+        qc.h = region.getRegionHeight() * scale;
     }
 
     @Override

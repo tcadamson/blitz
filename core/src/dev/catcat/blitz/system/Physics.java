@@ -13,19 +13,17 @@ import dev.catcat.blitz.component.Transform;
 
 @All({Transform.class, Collider.class})
 public class Physics extends IteratingSystem {
-    World world;
-    Vector2 pos;
-    ComponentMapper<Transform> tm;
-    ComponentMapper<Collider> cm;
-    public final float PPM = 100f;
-
-    public Physics(World world) {
-        this.world = world;
-    }
+    public static final float PPM = 100f;
+    protected ComponentMapper<Transform> tm;
+    protected ComponentMapper<Collider> cm;
+    private World world;
+    private Vector2 pos;
 
     @Override
     protected void initialize() {
+        world = new World(new Vector2(), true);
         pos = new Vector2();
+        world.setAutoClearForces(false);
     }
 
     @Override
@@ -47,8 +45,7 @@ public class Physics extends IteratingSystem {
     @Override
     protected void process(int e) {
         Transform tc = tm.get(e);
-        pos.set(cm.get(e).body.getPosition()).scl(PPM);
-        tc.set(pos);
+        tc.set(pos.set(cm.get(e).body.getPosition()).scl(PPM));
     }
 
     public World getBox2DWorld() {

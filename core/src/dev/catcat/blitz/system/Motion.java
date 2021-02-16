@@ -4,21 +4,14 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
-import dev.catcat.blitz.Controller;
 import dev.catcat.blitz.component.Collider;
 import dev.catcat.blitz.component.Steer;
-import dev.catcat.blitz.component.Transform;
 
-@All({Transform.class, Collider.class, Steer.class})
+@All({Collider.class, Steer.class})
 public class Motion extends IteratingSystem {
-    Controller controller;
-    Vector2 dir;
-    ComponentMapper<Collider> cm;
-    ComponentMapper<Steer> sm;
-
-    public Motion(Controller controller) {
-        this.controller = controller;
-    }
+    protected ComponentMapper<Collider> cm;
+    protected ComponentMapper<Steer> sm;
+    private Vector2 dir;
 
     @Override
     protected void initialize() {
@@ -29,8 +22,6 @@ public class Motion extends IteratingSystem {
     protected void process(int e) {
         Collider cc = cm.get(e);
         Steer sc = sm.get(e);
-        dir.set(controller.getDir());
-        sc.set(dir);
-        cc.body.applyForceToCenter(dir.scl(sc.thrust * cc.body.getMass()), true);
+        cc.body.applyForceToCenter(dir.set(sc.x, sc.y).nor().scl(sc.thrust * cc.body.getMass()), true);
     }
 }

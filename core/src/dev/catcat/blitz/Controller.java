@@ -2,28 +2,17 @@ package dev.catcat.blitz;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Vector2;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Controller extends InputAdapter {
-    private Map<String, Integer> axes;
-    private Vector2 dir;
-    private boolean[] pressed;
-    private boolean[] released;
-    private boolean[] down;
-    private final int KEYS = 256;
+    private final boolean[] pressed;
+    private final boolean[] released;
+    private final boolean[] down;
+    private static final int KEYS = 256;
 
     public Controller() {
-        axes = new HashMap<>();
-        dir = new Vector2();
         pressed = new boolean[KEYS];
         released = new boolean[KEYS];
         down = new boolean[KEYS];
-        axes.put("wy", 1);
-        axes.put("sy", -1);
-        axes.put("ax", -1);
-        axes.put("dx", 1);
     }
 
     @Override
@@ -57,22 +46,6 @@ public class Controller extends InputAdapter {
             pressed[i] = false;
             released[i] = false;
         }
-    }
-
-    public Vector2 getDir() {
-        float x = 0;
-        float y = 0;
-        for (Map.Entry<String, Integer> axis : axes.entrySet()) {
-            String k = axis.getKey();
-            int v = axis.getValue();
-            char c1 = k.charAt(0);
-            char c2 = k.charAt(1);
-            if (down(c1)) {
-                x += c2 == 'x' ? v : 0;
-                y += c2 == 'y' ? v : 0;
-            }
-        }
-        return dir.set(x, y).nor();
     }
 
     private boolean handler(char key, boolean[] group) {

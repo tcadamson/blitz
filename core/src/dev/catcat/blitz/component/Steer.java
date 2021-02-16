@@ -12,9 +12,4 @@ public class Steer extends Component {
         this.x = x;
         this.y = y;
     }
-
-    public void set(Vector2 pos) {
-        x = pos.x;
-        y = pos.y;
-    }
 }
