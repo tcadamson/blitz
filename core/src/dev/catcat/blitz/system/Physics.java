@@ -32,7 +32,7 @@ public class Physics extends IteratingSystem {
         Collider cc = cm.get(e);
         BodyDef def = new BodyDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(cc.r/PPM);
+        shape.setRadius(tc.w/2/PPM);
         def.linearDamping = cc.damp;
         def.type = BodyDef.BodyType.DynamicBody;
         cc.body = world.createBody(def);

@@ -41,11 +41,12 @@ public class Draw extends IteratingSystem {
 
     @Override
     protected void inserted(int e) {
+        Transform tc = tm.get(e);
         Quad qc = qm.get(e);
         TextureRegion region = res.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
         float scale = 0.15f;
-        qc.w = region.getRegionWidth() * scale;
-        qc.h = region.getRegionHeight() * scale;
+        tc.w = region.getRegionWidth() * scale;
+        tc.h = region.getRegionHeight() * scale;
     }
 
     @Override
@@ -60,9 +61,8 @@ public class Draw extends IteratingSystem {
     @Override
     protected void process(int e) {
         Transform tc = tm.get(e);
-        Quad qc = qm.get(e);
         batch.setColor(colors.get("body"));
-        batch.draw(getRegion(qc), tc.x - qc.w/2, tc.y - qc.h/2, qc.w, qc.h);
+        batch.draw(getRegion(qm.get(e)), tc.x - tc.w/2, tc.y - tc.h/2, tc.w, tc.h);
     }
 
     @Override

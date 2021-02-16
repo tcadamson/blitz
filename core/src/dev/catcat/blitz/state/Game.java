@@ -52,7 +52,6 @@ public class Game implements Screen {
         Steer sc = ecs.getMapper(Steer.class).get(e);
         qc.atlas = "test.atlas";
         qc.region = "a";
-        cc.r = 50f;
         cc.damp = 20f;
         sc.thrust = 30f;
     }
