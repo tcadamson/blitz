@@ -37,6 +37,8 @@ public class Draw extends IteratingSystem {
         // TODO: import these from some external config file
         colors.put("bg", Color.valueOf("DCE0E0"));
         colors.put("body", Color.valueOf("1D3557"));
+        colors.put("dark", Color.valueOf("E63946"));
+        colors.put("red", Color.valueOf("BDC1C6"));
     }
 
     @Override
@@ -44,9 +46,8 @@ public class Draw extends IteratingSystem {
         Transform tc = tm.get(e);
         Quad qc = qm.get(e);
         TextureRegion region = res.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
-        float scale = 0.15f;
-        tc.w = region.getRegionWidth() * scale;
-        tc.h = region.getRegionHeight() * scale;
+        tc.w = region.getRegionWidth();
+        tc.h = region.getRegionHeight();
     }
 
     @Override
