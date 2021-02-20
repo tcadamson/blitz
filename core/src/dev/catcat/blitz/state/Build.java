@@ -4,14 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maltaisn.msdfgdx.FontStyle;
 import com.maltaisn.msdfgdx.MsdfFont;
 import com.maltaisn.msdfgdx.MsdfShader;
-import java.util.Map;
 
 public class Build implements Screen {
     private final AssetManager res;
@@ -20,16 +19,18 @@ public class Build implements Screen {
     private final MsdfShader shader;
     private final FontStyle f1;
     private final FontStyle f2;
+    private static final int FONT_LARGE = 80;
+    private static final int FONT_SMALL = 43;
 
-    public Build(AssetManager res, Camera camera, Map<String, Color> colors) {
+    public Build(AssetManager res, Camera camera) {
         this.res = res;
         this.camera = camera;
         batch = new SpriteBatch();
         shader = new MsdfShader();
         f1 = new FontStyle()
-            .setColor(colors.get("body"))
-            .setSize(80f);
-        f2 = new FontStyle(f1).setSize(43f);
+            .setColor(Colors.get("BLUE"))
+            .setSize(FONT_LARGE);
+        f2 = new FontStyle(f1).setSize(FONT_SMALL);
     }
 
     @Override
