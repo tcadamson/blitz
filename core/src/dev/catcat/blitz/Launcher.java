@@ -26,10 +26,6 @@ public class Launcher extends com.badlogic.gdx.Game {
 	public void create() {
 		Camera camera = new OrthographicCamera();
 		Map<String, Color> colors = new HashMap<>();
-		res = new AssetManager();
-		viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-		game = new Game(res, camera, colors);
-		build = new Build(res, camera, colors);
 		// TODO: import these from some external config file
 		colors.put("bg", Color.valueOf("DCE0E0"));
 		colors.put("body", Color.valueOf("1D3557"));
@@ -37,6 +33,10 @@ public class Launcher extends com.badlogic.gdx.Game {
 		colors.put("red", Color.valueOf("BDC1C6"));
 		Color bg = colors.get("bg");
 		Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
+		res = new AssetManager();
+		viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+		game = new Game(res, camera, colors);
+		build = new Build(res, camera, colors);
 		// TODO: load these by crawling directory
 		res.setLoader(MsdfFont.class, new MsdfFontLoader(new InternalFileHandleResolver()));
 		res.load("out.atlas", TextureAtlas.class);
