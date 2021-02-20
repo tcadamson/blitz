@@ -4,10 +4,11 @@ import com.artemis.Archetype;
 import com.artemis.ArchetypeBuilder;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import java.util.Map;
 import dev.catcat.blitz.Run;
 import dev.catcat.blitz.component.Collider;
 import dev.catcat.blitz.component.Quad;
@@ -22,10 +23,10 @@ import dev.catcat.blitz.system.Physics;
 public class Game implements Screen {
     private final World ecs;
 
-    public Game(AssetManager res, Camera camera) {
+    public Game(AssetManager res, Camera camera, Map<String, Color> colors) {
         ecs = new World(new WorldConfigurationBuilder()
             .with(
-                new Draw(res, camera),
+                new Draw(res, camera, colors),
                 new Debug(camera),
                 new Control(),
                 new Motion(),
@@ -56,7 +57,6 @@ public class Game implements Screen {
 
     @Override
     public void render(float dt) {
-        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
         ecs.setDelta(dt);
         ecs.process();
     }

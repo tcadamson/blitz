@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import java.util.HashMap;
 import java.util.Map;
 import dev.catcat.blitz.component.Quad;
 import dev.catcat.blitz.component.Transform;
@@ -22,23 +21,18 @@ public class Draw extends IteratingSystem {
     protected ComponentMapper<Quad> qm;
     private final AssetManager res;
     private final Camera camera;
+    private final Map<String, Color> colors;
     private SpriteBatch batch;
-    private Map<String, Color> colors;
 
-    public Draw(AssetManager res, Camera camera) {
+    public Draw(AssetManager res, Camera camera, Map<String, Color> colors) {
         this.res = res;
         this.camera = camera;
+        this.colors = colors;
     }
 
     @Override
     protected void initialize() {
         batch = new SpriteBatch();
-        colors = new HashMap<>();
-        // TODO: import these from some external config file
-        colors.put("bg", Color.valueOf("DCE0E0"));
-        colors.put("body", Color.valueOf("1D3557"));
-        colors.put("dark", Color.valueOf("E63946"));
-        colors.put("red", Color.valueOf("BDC1C6"));
     }
 
     @Override
@@ -52,8 +46,6 @@ public class Draw extends IteratingSystem {
 
     @Override
     protected void begin() {
-        Color bg = colors.get("bg");
-        Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();

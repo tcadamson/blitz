@@ -102,6 +102,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "net.onedaybeard.artemis:artemis-odb:2.3.0"
+        api "com.maltaisn:msdf-gdx:0.2.0"
         
     }
 }
