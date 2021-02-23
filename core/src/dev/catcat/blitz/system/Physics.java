@@ -14,9 +14,9 @@ import dev.catcat.blitz.component.Transform;
 @All({Transform.class, Collider.class})
 public class Physics extends IteratingSystem {
     public static final float PPM = 100f;
+    private static World world;
     protected ComponentMapper<Transform> tm;
     protected ComponentMapper<Collider> cm;
-    private World world;
     private Vector2 pos;
 
     @Override
@@ -48,7 +48,7 @@ public class Physics extends IteratingSystem {
         tc.set(pos.set(cm.get(e).body.getPosition()).scl(PPM));
     }
 
-    public World getBox2DWorld() {
+    public static World getBox2DWorld() {
         return world;
     }
 

@@ -5,8 +5,6 @@ import com.artemis.ArchetypeBuilder;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import dev.catcat.blitz.Run;
 import dev.catcat.blitz.component.Collider;
 import dev.catcat.blitz.component.Quad;
@@ -21,11 +19,11 @@ import dev.catcat.blitz.system.Physics;
 public class Game implements Screen {
     private final World ecs;
 
-    public Game(AssetManager res, Camera camera) {
+    public Game() {
         ecs = new World(new WorldConfigurationBuilder()
             .with(
-                new Draw(res, camera),
-                new Debug(camera),
+                new Draw(),
+                new Debug(),
                 new Control(),
                 new Motion(),
                 new Physics()

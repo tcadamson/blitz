@@ -4,13 +4,13 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import dev.catcat.blitz.Assets;
+import dev.catcat.blitz.Camera;
 import dev.catcat.blitz.component.Quad;
 import dev.catcat.blitz.component.Transform;
 
@@ -18,14 +18,7 @@ import dev.catcat.blitz.component.Transform;
 public class Draw extends IteratingSystem {
     protected ComponentMapper<Transform> tm;
     protected ComponentMapper<Quad> qm;
-    private final AssetManager res;
-    private final Camera camera;
     private SpriteBatch batch;
-
-    public Draw(AssetManager res, Camera camera) {
-        this.res = res;
-        this.camera = camera;
-    }
 
     @Override
     protected void initialize() {
@@ -36,7 +29,7 @@ public class Draw extends IteratingSystem {
     protected void inserted(int e) {
         Transform tc = tm.get(e);
         Quad qc = qm.get(e);
-        TextureRegion region = res.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
+        TextureRegion region = Assets.INSTANCE.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
         tc.w = region.getRegionWidth();
         tc.h = region.getRegionHeight();
     }
@@ -44,7 +37,7 @@ public class Draw extends IteratingSystem {
     @Override
     protected void begin() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(Camera.INSTANCE.getCombined());
         batch.begin();
     }
 
@@ -61,6 +54,6 @@ public class Draw extends IteratingSystem {
     }
 
     private TextureRegion getRegion(Quad qc) {
-        return res.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
+        return Assets.INSTANCE.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
     }
 }
