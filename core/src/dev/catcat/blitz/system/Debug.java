@@ -6,14 +6,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import dev.catcat.blitz.Camera;
 
 public class Debug extends BaseSystem {
-    private Box2DDebugRenderer debug;
-    private Matrix4 combined;
-
-    @Override
-    protected void initialize() {
-        debug = new Box2DDebugRenderer();
-        combined = new Matrix4();
-    }
+    private static final Box2DDebugRenderer debug = new Box2DDebugRenderer();
+    private static final Matrix4 combined = new Matrix4();
 
     @Override
     protected void processSystem() {

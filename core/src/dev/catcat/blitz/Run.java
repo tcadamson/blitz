@@ -6,11 +6,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import dev.catcat.blitz.system.Physics;
 
 public class Run extends SystemInvocationStrategy {
-    private float accumulator;
-    private final float DT = 1/240f;
-    private final int DX = 6;
-    private final int DS = 2;
-    private final int MAX_STEPS = 20;
+    private static final float DT = 1/240f;
+    private static final int DX = 6;
+    private static final int DS = 2;
+    private static final int MAX_STEPS = 20;
+    private static float accumulator;
 
     @Override
     protected void process() {
@@ -22,7 +22,7 @@ public class Run extends SystemInvocationStrategy {
             if (sys instanceof Physics) {
                 // Source: https://www.unagames.com/blog/daniele/2010/06/fixed-time-step-implementation-box2d
                 Physics physics = (Physics) sys;
-                World world = physics.getBox2DWorld();
+                World world = Physics.getBox2DWorld();
                 accumulator += this.world.getDelta();
                 int steps = (int) Math.floor(accumulator / DT);
                 if (steps > 0) {

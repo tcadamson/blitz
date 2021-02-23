@@ -9,14 +9,9 @@ import dev.catcat.blitz.component.Steer;
 
 @All({Collider.class, Steer.class})
 public class Motion extends IteratingSystem {
+    private static final Vector2 dir = new Vector2();
     protected ComponentMapper<Collider> cm;
     protected ComponentMapper<Steer> sm;
-    private Vector2 dir;
-
-    @Override
-    protected void initialize() {
-        dir = new Vector2();
-    }
 
     @Override
     protected void process(int e) {

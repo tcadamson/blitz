@@ -13,21 +13,14 @@ import dev.catcat.blitz.Assets;
 import dev.catcat.blitz.Camera;
 
 public class Build implements Screen {
-    private final SpriteBatch batch;
-    private final MsdfShader shader;
-    private final FontStyle f1;
-    private final FontStyle f2;
     private static final int FONT_LARGE = 80;
     private static final int FONT_SMALL = 43;
-
-    public Build() {
-        batch = new SpriteBatch();
-        shader = new MsdfShader();
-        f1 = new FontStyle()
-            .setColor(Colors.get("BLUE"))
-            .setSize(FONT_LARGE);
-        f2 = new FontStyle(f1).setSize(FONT_SMALL);
-    }
+    private static final SpriteBatch batch = new SpriteBatch();
+    private static final MsdfShader shader = new MsdfShader();
+    private static final FontStyle f1 = new FontStyle()
+        .setColor(Colors.get("BLUE"))
+        .setSize(FONT_LARGE);
+    private static final FontStyle f2 = new FontStyle(f1).setSize(FONT_SMALL);
 
     @Override
     public void show() {
@@ -63,7 +56,7 @@ public class Build implements Screen {
     public void dispose() {
     }
 
-    private void text(FontStyle style, String str, int x, int y) {
+    private static void text(FontStyle style, String str, int x, int y) {
         MsdfFont data = Assets.INSTANCE.get("baloo.fnt", MsdfFont.class);
         BitmapFont font = data.getFont();
         batch.setShader(shader);

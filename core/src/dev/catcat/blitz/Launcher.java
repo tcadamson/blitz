@@ -7,8 +7,8 @@ import dev.catcat.blitz.state.Build;
 import dev.catcat.blitz.state.Game;
 
 public class Launcher extends com.badlogic.gdx.Game {
-	private Game game;
-	private Build build;
+	private static Game game;
+	private static Build build;
 
 	@Override
 	public void create() {

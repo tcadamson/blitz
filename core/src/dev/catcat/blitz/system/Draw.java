@@ -16,14 +16,9 @@ import dev.catcat.blitz.component.Transform;
 
 @All({Transform.class, Quad.class})
 public class Draw extends IteratingSystem {
+    private static final SpriteBatch batch = new SpriteBatch();
     protected ComponentMapper<Transform> tm;
     protected ComponentMapper<Quad> qm;
-    private SpriteBatch batch;
-
-    @Override
-    protected void initialize() {
-        batch = new SpriteBatch();
-    }
 
     @Override
     protected void inserted(int e) {
@@ -53,7 +48,7 @@ public class Draw extends IteratingSystem {
         batch.end();
     }
 
-    private TextureRegion getRegion(Quad qc) {
+    private static TextureRegion getRegion(Quad qc) {
         return Assets.INSTANCE.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
     }
 }

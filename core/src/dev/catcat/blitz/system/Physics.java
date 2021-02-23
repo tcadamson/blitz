@@ -14,15 +14,13 @@ import dev.catcat.blitz.component.Transform;
 @All({Transform.class, Collider.class})
 public class Physics extends IteratingSystem {
     public static final float PPM = 100f;
-    private static World world;
+    private static final World world = new World(new Vector2(), true);
+    private static final Vector2 pos = new Vector2();
     protected ComponentMapper<Transform> tm;
     protected ComponentMapper<Collider> cm;
-    private Vector2 pos;
 
     @Override
     protected void initialize() {
-        world = new World(new Vector2(), true);
-        pos = new Vector2();
         world.setAutoClearForces(false);
     }
 

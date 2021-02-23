@@ -17,25 +17,24 @@ import dev.catcat.blitz.system.Motion;
 import dev.catcat.blitz.system.Physics;
 
 public class Game implements Screen {
-    private final World ecs;
+    private static final World ecs = new World(new WorldConfigurationBuilder()
+        .with(
+            new Draw(),
+            new Debug(),
+            new Control(),
+            new Motion(),
+            new Physics()
+        )
+        .register(new Run())
+        .build());
+    private static final Archetype core = new ArchetypeBuilder()
+        .add(Transform.class)
+        .add(Collider.class)
+        .add(Quad.class)
+        .add(Steer.class)
+        .build(ecs);
 
     public Game() {
-        ecs = new World(new WorldConfigurationBuilder()
-            .with(
-                new Draw(),
-                new Debug(),
-                new Control(),
-                new Motion(),
-                new Physics()
-            )
-            .register(new Run())
-            .build());
-        Archetype core = new ArchetypeBuilder()
-            .add(Transform.class)
-            .add(Collider.class)
-            .add(Quad.class)
-            .add(Steer.class)
-            .build(ecs);
         // TODO: create a more sophisticated entity builder
         int e = ecs.create(core);
         Collider cc = ecs.getMapper(Collider.class).get(e);

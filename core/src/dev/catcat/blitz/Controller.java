@@ -4,16 +4,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 public class Controller extends InputAdapter {
-    private final boolean[] pressed;
-    private final boolean[] released;
-    private final boolean[] down;
     private static final int KEYS = 256;
-
-    public Controller() {
-        pressed = new boolean[KEYS];
-        released = new boolean[KEYS];
-        down = new boolean[KEYS];
-    }
+    private static final boolean[] pressed = new boolean[KEYS];
+    private static final boolean[] released = new boolean[KEYS];
+    private static final boolean[] down = new boolean[KEYS];
 
     @Override
     public boolean keyDown(int key) {

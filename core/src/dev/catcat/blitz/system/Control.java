@@ -11,14 +11,12 @@ import dev.catcat.blitz.component.Steer;
 
 @All(Steer.class)
 public class Control extends IteratingSystem {
+    private static final Map<String, Integer> axes = new HashMap<>();
+    private static final Controller controller = new Controller();
     protected ComponentMapper<Steer> sm;
-    private Controller controller;
-    private Map<String, Integer> axes;
 
     @Override
     protected void initialize() {
-        controller = new Controller();
-        axes = new HashMap<>();
         Gdx.input.setInputProcessor(controller);
         // TODO: import these from some external config file
         axes.put("wy", 1);
