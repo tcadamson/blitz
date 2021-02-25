@@ -6,17 +6,16 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import dev.catcat.blitz.Assets;
+import dev.catcat.blitz.Batch;
 import dev.catcat.blitz.Camera;
 import dev.catcat.blitz.component.Quad;
 import dev.catcat.blitz.component.Transform;
 
 @All({Transform.class, Quad.class})
 public class Draw extends IteratingSystem {
-    private static final SpriteBatch batch = new SpriteBatch();
     protected ComponentMapper<Transform> tm;
     protected ComponentMapper<Quad> qm;
 
@@ -32,20 +31,19 @@ public class Draw extends IteratingSystem {
     @Override
     protected void begin() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(Camera.INSTANCE.getCombined());
-        batch.begin();
+        Batch.INSTANCE.begin(Camera.INSTANCE.getCombined());
     }
 
     @Override
     protected void process(int e) {
         Transform tc = tm.get(e);
-        batch.setColor(Colors.get("BLUE"));
-        batch.draw(getRegion(qm.get(e)), tc.x - tc.w/2, tc.y - tc.h/2, tc.w, tc.h);
+        Batch.INSTANCE.setColor(Colors.get("BLUE"));
+        Batch.INSTANCE.draw(getRegion(qm.get(e)), tc.x - tc.w/2, tc.y - tc.h/2, tc.w, tc.h);
     }
 
     @Override
     protected void end() {
-        batch.end();
+        Batch.INSTANCE.end();
     }
 
     private static TextureRegion getRegion(Quad qc) {
