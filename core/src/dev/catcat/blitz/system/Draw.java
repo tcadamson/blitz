@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import dev.catcat.blitz.Assets;
 import dev.catcat.blitz.Batch;
 import dev.catcat.blitz.Camera;
@@ -23,9 +24,9 @@ public class Draw extends IteratingSystem {
     protected void inserted(int e) {
         Transform tc = tm.get(e);
         Quad qc = qm.get(e);
-        TextureRegion region = Assets.INSTANCE.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
-        tc.w = region.getRegionWidth();
-        tc.h = region.getRegionHeight();
+        Vector2 box = Assets.INSTANCE.getBox(qc.atlas, qc.id);
+        tc.w = box.x;
+        tc.h = box.y;
     }
 
     @Override
@@ -47,6 +48,6 @@ public class Draw extends IteratingSystem {
     }
 
     private static TextureRegion getRegion(Quad qc) {
-        return Assets.INSTANCE.get(qc.atlas, TextureAtlas.class).findRegion(qc.region);
+        return Assets.INSTANCE.get(qc.atlas, TextureAtlas.class).findRegion(qc.id);
     }
 }

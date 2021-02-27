@@ -41,7 +41,7 @@ public class Game implements Screen {
         Quad qc = ecs.getMapper(Quad.class).get(e);
         Steer sc = ecs.getMapper(Steer.class).get(e);
         qc.atlas = "out.atlas";
-        qc.region = "b1";
+        qc.id = "b1";
         cc.damp = 20f;
         sc.thrust = 125f;
     }
