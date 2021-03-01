@@ -11,6 +11,7 @@ import dev.catcat.blitz.Assets;
 import dev.catcat.blitz.Batch;
 
 public class Text implements Node {
+    private static final MsdfFont data = Assets.INSTANCE.get("baloo.fnt", MsdfFont.class);
     private static final MsdfShader shader = new MsdfShader();
     private static final GlyphLayout layout = new GlyphLayout();
     private final Vector2 pos = new Vector2();
@@ -33,10 +34,9 @@ public class Text implements Node {
 
     @Override
     public void draw() {
-        MsdfFont data = Assets.INSTANCE.get("baloo.fnt", MsdfFont.class);
+        resolveLayout();
         Batch.INSTANCE.setShader(shader);
         shader.updateForFont(data, style);
-        resolveLayout();
         data.getFont().draw(Batch.INSTANCE.getBatch(), layout, pos.x, pos.y);
         Batch.INSTANCE.setShader(null);
     }
@@ -52,7 +52,6 @@ public class Text implements Node {
     }
 
     private void resolveLayout() {
-        MsdfFont data = Assets.INSTANCE.get("baloo.fnt", MsdfFont.class);
         BitmapFont font = data.getFont();
         font.getData().setScale(style.getSize() / data.getGlyphSize());
         layout.setText(font, str, style.getColor(), w, Align.left, true);

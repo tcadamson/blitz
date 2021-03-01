@@ -7,8 +7,7 @@ import dev.catcat.blitz.state.Build;
 import dev.catcat.blitz.state.Game;
 
 public class Launcher extends com.badlogic.gdx.Game {
-	private static Game game;
-	private static Build build;
+	private static boolean loaded;
 
 	@Override
 	public void create() {
@@ -19,15 +18,16 @@ public class Launcher extends com.badlogic.gdx.Game {
 		Colors.put("RED", Color.valueOf("E63946"));
 		Color bg = Colors.get("BG");
 		Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
-		game = new Game();
-		build = new Build();
 	}
 
 	@Override
 	public void render() {
 		super.render();
 		Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
-		if (Assets.INSTANCE.update()) {
+		if (!loaded && Assets.INSTANCE.update()) {
+			Game game = new Game();
+			Build build = new Build();
+			loaded = true;
 			setScreen(build);
 		}
 	}
