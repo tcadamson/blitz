@@ -13,14 +13,15 @@ public enum Camera {
     private final Vector2 box = new Vector2();
 
     public void resize(int w, int h) {
-        viewport.update(w, h);
+        viewport.update(w, h, true);
+    }
+
+    public ExtendViewport getViewport() {
+        // Only for registering with UI scene graph
+        return viewport;
     }
 
     public Matrix4 getCombined() {
         return camera.combined;
-    }
-
-    public Vector2 getBox() {
-        return box.set(camera.viewportWidth, camera.viewportHeight);
     }
 }
