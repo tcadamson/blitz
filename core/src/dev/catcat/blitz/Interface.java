@@ -1,8 +1,11 @@
 package dev.catcat.blitz;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.maltaisn.msdfgdx.FontStyle;
@@ -31,6 +34,7 @@ public class Interface {
         root.setDebug(true);
         skin.add("default", new MsdfShader());
         skin.add("baloo", font);
+        skin.addRegions(Assets.INSTANCE.get("out.atlas", TextureAtlas.class));
         font.getFont().getData().setLineHeight(FONT_LINE_HEIGHT);
     }
 
@@ -47,6 +51,16 @@ public class Interface {
         MsdfLabel body = new MsdfLabel(str, skin, f2);
         body.setWrap(true);
         return body;
+    }
+
+    public Image image(String id) {
+        return image(id, Colors.get("BLUE"));
+    }
+
+    public Image image(String id, Color color) {
+        Image image = new Image(skin.getSprite(id));
+        image.setColor(color);
+        return image;
     }
 
     public Table getRoot() {
