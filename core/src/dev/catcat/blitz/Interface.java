@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -53,21 +55,18 @@ public class Interface {
         return body;
     }
 
-    public Image image(String id) {
-        return image(id, Colors.get("BLUE"));
-    }
-
-    public Image image(String id, Color color) {
-        Image image = new Image(skin.getSprite(id));
-        image.setColor(color);
-        return image;
-    }
-
     public Table getRoot() {
         return root;
     }
 
     public void registerInput() {
         Gdx.input.setInputProcessor(stage);
+    }
+
+    public Cell<Image> registerImage(Table table, String id, Color color) {
+        Vector2 box = Assets.INSTANCE.getBox("out.atlas", id);
+        Image image = new Image(skin.getSprite(id));
+        image.setColor(color);
+        return table.add(image).size(box.x, box.y);
     }
 }
