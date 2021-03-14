@@ -8,8 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.maltaisn.msdfgdx.FontStyle;
 import com.maltaisn.msdfgdx.MsdfFont;
 import com.maltaisn.msdfgdx.MsdfShader;
@@ -52,6 +54,7 @@ public class Interface {
     public MsdfLabel body(String str) {
         MsdfLabel body = new MsdfLabel(str, skin, f2);
         body.setWrap(true);
+        body.setAlignment(Align.topLeft);
         return body;
     }
 
@@ -63,10 +66,21 @@ public class Interface {
         Gdx.input.setInputProcessor(stage);
     }
 
-    public Cell<Image> registerImage(Table table, String id, Color color) {
-        Vector2 box = Assets.INSTANCE.getBox("out.atlas", id);
+    public Cell<?> registerImage(Table table, String id, Color color) {
         Image image = new Image(skin.getSprite(id));
         image.setColor(color);
-        return table.add(image).size(box.x, box.y);
+        return resized(table.add(image), id);
+    }
+
+    public Cell<?> registerButton(Table table, String id) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = skin.newDrawable(id, Colors.get("BLUE"));
+        style.over = skin.newDrawable(id, Colors.get("RED"));
+        return resized(table.add(new ImageButton(style)), id);
+    }
+
+    private Cell<?> resized(Cell<?> cell, String id) {
+        Vector2 box = Assets.INSTANCE.getBox("out.atlas", id);
+        return cell.size(box.x, box.y);
     }
 }

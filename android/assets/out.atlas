@@ -6,21 +6,14 @@ filter: MipMapLinearLinear, Linear
 repeat: none
 a3
   rotate: false
-  xy: 1902, 1664
+  xy: 1902, 1626
   size: 100, 366
   orig: 100, 366
   offset: 0, 0
   index: -1
-c
-  rotate: false
-  xy: 10, 2
-  size: 144, 144
-  orig: 144, 144
-  offset: 0, 0
-  index: -1
 m1
   rotate: false
-  xy: 10, 148
+  xy: 10, 110
   size: 1882, 1882
   orig: 1882, 1882
   offset: 0, 0
@@ -33,70 +26,77 @@ filter: MipMapLinearLinear, Linear
 repeat: none
 a1
   rotate: false
-  xy: 392, 89
+  xy: 392, 97
   size: 272, 273
   orig: 272, 273
   offset: 0, 0
   index: -1
 a2
   rotate: false
-  xy: 610, 1197
+  xy: 526, 1136
   size: 264, 265
   orig: 264, 265
   offset: 0, 0
   index: -1
 b1
   rotate: false
-  xy: 10, 2
+  xy: 10, 10
   size: 372, 360
   orig: 372, 360
   offset: 0, 0
   index: -1
 b2
   rotate: false
-  xy: 1125, 1278
+  xy: 1125, 1302
   size: 328, 328
   orig: 328, 328
   offset: 0, 0
   index: -1
 b3
   rotate: false
-  xy: 1532, 1613
+  xy: 1532, 1645
   size: 356, 356
   orig: 356, 356
   offset: 0, 0
   index: -1
 b4
   rotate: false
-  xy: 1125, 1608
+  xy: 1125, 1640
   size: 397, 361
   orig: 397, 361
   offset: 0, 0
   index: -1
+c
+  rotate: false
+  xy: 526, 982
+  size: 144, 144
+  orig: 144, 144
+  offset: 0, 0
+  index: -1
 i1
   rotate: false
-  xy: 10, 364
+  xy: 10, 380
   size: 505, 505
   orig: 505, 505
   offset: 0, 0
   index: -1
 i2
   rotate: false
-  xy: 10, 871
+  xy: 10, 895
   size: 506, 506
   orig: 506, 506
   offset: 0, 0
   index: -1
 i3
   rotate: false
-  xy: 610, 1464
+  xy: 610, 1496
   size: 505, 505
   orig: 505, 505
   offset: 0, 0
   index: -1
 t1
   rotate: false
-  xy: 10, 1379
+  xy: 10, 1411
   size: 590, 590
   orig: 590, 590
   offset: 0, 0
